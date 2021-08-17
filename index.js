@@ -1,3 +1,5 @@
+const { SocketAddress } = require('net');
+
 const httpServer = require('http').createServer();
 
 const port = process.env.PORT || 3000;
@@ -12,10 +14,16 @@ const io = require('socket.io')(httpServer, {
 io.on('connection', (socket) => {
   console.log('hello, new connection');
 
-  socket.on('create', function (room) {
-    // create a room with a dynamic name
-    socket.join(room);
-    console.log(`you joined ${room}`);
+  socket.on('joinRoom', (roomName) => {
+    socket.join(roomName);
+    console.log(`you joined ${roomName}`);
+    // Tell everyone a user joined
+    socket.in(roomName).emit('userJoined');
+  });
+
+  socket.on('userFinished', (quizData) => {
+    // Quiz data should have the score and the room name.
+    socket.in(quizData.roomName).emit('userFinished', quizData);
   });
 
   socket.on('disconnect', (socket) => {
