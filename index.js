@@ -1,21 +1,26 @@
-const cors = require("cors");
-const app = require("express")();
-
-app.use(cors());
-
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const httpServer = require('http').createServer();
 
 const port = process.env.PORT || 3000;
 
-io.on("connection", (socket) => {
-  console.log("hello, new connection");
+const io = require('socket.io')(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
 
-  socket.on("disconnect", (socket) => {
-    console.log("Someone disconnected from the socket..");
+io.on('connection', (socket) => {
+  console.log('hello, new connection');
+
+  socket.on('create', function (room) {
+    // create a room with a dynamic name
+    socket.join(room);
+    console.log(`you joined ${room}`);
+  });
+
+  socket.on('disconnect', (socket) => {
+    console.log('Someone disconnected from the socket..');
   });
 });
 
-server.listen(port, () =>
-  console.log(`Express now departing from port ${port}!`)
-);
+io.listen(port, () => console.log(`Express now departing from port ${port}!`));
