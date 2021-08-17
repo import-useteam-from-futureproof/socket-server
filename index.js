@@ -26,6 +26,12 @@ io.on('connection', (socket) => {
     socket.in(quizData.roomName).emit('userFinished', quizData);
   });
 
+  //=== Chatroom ===//
+  socket.on('newMessage', (message) => {
+    socket.to(message.roomName).emit('newMessage', message);
+    console.log(message); // world
+  });
+
   socket.on('disconnect', (socket) => {
     console.log('Someone disconnected from the socket..');
   });
