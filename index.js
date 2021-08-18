@@ -14,11 +14,11 @@ const io = require("socket.io")(httpServer, {
 io.on("connection", (socket) => {
   console.log("hello, new connection");
 
-  socket.on("joinRoom", (roomName) => {
-    socket.join(roomName);
-    console.log(`you joined ${roomName}`);
+  socket.on("joinRoom", (data) => {
+    socket.join(data.roomName);
+    console.log(`${data.username} joined ${data.roomName}`);
     // Tell everyone a user joined
-    socket.in(roomName).emit("userJoined");
+    socket.in(data.roomName).emit("userJoined");
   });
 
   socket.on("userFinished", (quizData) => {
