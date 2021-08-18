@@ -1,5 +1,4 @@
 const { SocketAddress } = require("net");
-
 const httpServer = require("http").createServer();
 
 const port = process.env.PORT || 3000;
@@ -32,7 +31,11 @@ io.on("connection", (socket) => {
     console.log(message); // world
   });
 
-  socket.on("disconnect", (socket) => {
+  socket.on("advanceGame", (data) => {
+    socket.to(data.roomName).emit("advanceGame", data.component);
+  });
+
+  socket.on("disconnect", async (socket) => {
     console.log("Someone disconnected from the socket..");
   });
 });
