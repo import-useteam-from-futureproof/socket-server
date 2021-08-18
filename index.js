@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
 
   socket.on("advanceGame", (data) => {
     socket.to(data.roomName).emit("advanceGame", data.component);
+    console.log("Quiz Advanced");
   });
 
   socket.on("disconnect", async (socket) => {
