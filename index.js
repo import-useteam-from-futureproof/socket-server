@@ -1,40 +1,42 @@
-const { SocketAddress } = require('net');
+const { SocketAddress } = require("net");
 
-const httpServer = require('http').createServer();
+const httpServer = require("http").createServer();
 
 const port = process.env.PORT || 3000;
 
-const io = require('socket.io')(httpServer, {
+const io = require("socket.io")(httpServer, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
+    origin: "*",
+    methods: ["GET", "POST"],
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('hello, new connection');
+io.on("connection", (socket) => {
+  console.log("hello, new connection");
 
-  socket.on('joinRoom', (roomName) => {
+  socket.on("joinRoom", (roomName) => {
     socket.join(roomName);
     console.log(`you joined ${roomName}`);
     // Tell everyone a user joined
-    socket.in(roomName).emit('userJoined');
+    socket.in(roomName).emit("userJoined");
   });
 
-  socket.on('userFinished', (quizData) => {
+  socket.on("userFinished", (quizData) => {
     // Quiz data should have the score and the room name.
-    socket.in(quizData.roomName).emit('userFinished', quizData);
+    socket.in(quizData.roomName).emit("userFinished", quizData);
   });
 
   //=== Chatroom ===//
-  socket.on('newMessage', (message) => {
-    socket.to(message.roomName).emit('newMessage', message);
+  socket.on("newMessage", (message) => {
+    socket.to(message.roomName).emit("newMessage", message);
     console.log(message); // world
   });
 
-  socket.on('disconnect', (socket) => {
-    console.log('Someone disconnected from the socket..');
+  socket.on("disconnect", (socket) => {
+    console.log("Someone disconnected from the socket..");
   });
 });
 
-io.listen(port, () => console.log(`Express now departing from port ${port}!`));
+httpServer.listen(port, () =>
+  console.log(`Express now departing from port ${port}!`)
+);
