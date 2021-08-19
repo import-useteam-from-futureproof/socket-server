@@ -32,11 +32,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("advanceGame", (data) => {
-    socket.to(data.roomName).emit("advanceGame", data.component);
+    socket.to(data.roomName).emit("advanceGame", data);
     console.log("Quiz Advanced");
   });
 
-  socket.on("disconnect", async (socket) => {
+  socket.on("disconnect", (socket) => {
     console.log("Someone disconnected from the socket..");
   });
 });
