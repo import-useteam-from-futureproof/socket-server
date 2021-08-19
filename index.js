@@ -25,6 +25,10 @@ io.on("connection", (socket) => {
     socket.in(quizData.roomName).emit("userFinished", quizData);
   });
 
+  socket.on("endGame", (roomName) => {
+    socket.in(roomName).emit("endGame");
+  });
+
   //=== Chatroom ===//
   socket.on("newMessage", (message) => {
     socket.to(message.roomName).emit("newMessage", message);
