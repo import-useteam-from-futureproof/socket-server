@@ -17,7 +17,7 @@ io.on("connection", (socket) => {
     socket.join(data.roomName);
     console.log(`${data.username} joined ${data.roomName}`);
     // Tell everyone a user joined
-    socket.in(data.roomName).emit("userJoined");
+    socket.in(data.roomName).emit(data);
   });
 
   socket.on("userFinished", (quizData) => {
