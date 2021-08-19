@@ -17,7 +17,7 @@ io.on("connection", (socket) => {
     socket.join(data.roomName);
     console.log(`${data.username} joined ${data.roomName}`);
     // Tell everyone a user joined
-    io.in(data.roomName).emit(data);
+    socket.in(data.roomName).emit("joinRoom", data);
   });
 
   socket.on("userFinished", (quizData) => {
@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
     console.log("Quiz Advanced");
   });
 
-  socket.on("disconnect", (socket) => {
+  socket.on("disconnect", () => {
     console.log("Someone disconnected from the socket..");
   });
 });
